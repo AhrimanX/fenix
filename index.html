@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <title>Феникс Люлин</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      background: url('https://i.ibb.co/N2RYTTNw/Sketch-of-two-karate.png') no-repeat center center fixed;
+      background-size: cover;
+      overflow-x: hidden;
+      color: white;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* SECTION LINKS ONLY */
+    .content a,
+    .content a:visited,
+    .content a:active {
+      color: white !important;
+      text-decoration: underline !important;
+      transition: color 0.25s ease;
+    }
+
+    .content a:hover {
+      color: #ff4444 !important;
+      text-decoration: underline !important;
+    }
+
+    .content h2 {
+      text-decoration: none !important;
+    }
+
+    #bgLayer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .bg-left,
+    .bg-right {
+      position: fixed;
+      top: 40%;
+      transform: translateY(-40%);
+      height: 40vh;
+      opacity: 0.15;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .bg-left { left: 0; }
+    .bg-right { right: 0; }
+
+    .center-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.4s ease, height 0.4s ease;
+      z-index: 5;
+    }
+
+    .center-container.hidden {
+      opacity: 0;
+      pointer-events: none;
+      height: 0;
+      overflow: hidden;
+    }
+
+    .logo {
+      height: 350px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .logo.open {
+      transform: scale(1.15);
+    }
+
+    .top-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0,0,0,0.85);
+      padding: 1rem 0;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 100;
+    }
+
+    .top-menu.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .top-menu a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+      transition: color 0.2s ease;
+    }
+
+    .top-menu a:hover {
+      color: #ff4444;
+    }
+
+    .content {
+      display: none;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 5rem auto 2rem auto;
+      background: rgba(0,0,0,0.7);
+      border-radius: 8px;
+      text-align: justify;
+      position: relative;
+      z-index: 10;
+    }
+
+    .content.active {
+      display: block;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    /* GALLERY */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .photo-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .photo-title {
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 6px rgba(0,0,0,0.5);
+    }
+
+    .photo-item img {
+      width: 20%;
+      height: auto;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 500; /* FIXED */
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-inner {
+      position: relative;
+      width: auto;
+      height: auto;
+    }
+
+    .modal-content {
+      width: 50%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+      margin: auto;
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      text-shadow: 0 0 8px black;
+      z-index: 300;
+    }
+
+    .close:hover { color: #bbb; }
+  </style>
+</head>
+
+<body>
+
+  <div id="bgLayer"></div>
+
+  <img src="https://i.ibb.co/8nw1n2b2/kan50black.png" class="bg-left" alt="">
+  <img src="https://i.ibb.co/N6xwC0mt/Kyokushinkai-resized-50.png" class="bg-right" alt="">
+
+  <div class="top-menu" id="topMenu">
+    <a href="#" onclick="return openSection('history')">За клуба</a>
+    <a href="#" onclick="return openSection('training')">Тренировки</a>
+    <a href="#" onclick="return openSection('gallery')">Галерия</a>
+    <a href="#" onclick="return openSection('contacts')">Контакти</a>
+    <a href="#" onclick="return openSection('kyokushin')">История на Киокушин</a>
+  </div>
+
+  <div class="center-container" id="centerContainer">
+    <img src="https://i.ibb.co/kgG8B8W7/3rd-variation-Copy-removebg-preview.png"
+         class="logo"
+         id="logo"
+         alt="Феникс Люлин Лого">
+  </div>
+
+  <!-- ЗА КЛУБА -->
+  <div id="history" class="content">
+    <h2>За клуба</h2>
+    <p>Клубът е създаден през 2023 г. и е част от Българска Федерация Киокушин-кан, която е официален представител на Kyokushin-kan International Organization Honbu, оглавявана от Хацуо Рояма – възпитаник и близък на основателя на Киокушин карате (прочетете повече секцията "История на Киокушин".</p>
+    <p>Предстои повече информация...</p>
+  </div>
+
+  <!-- ТРЕНИРОВКИ -->
+  <div id="training" class="content">
+    <h2>Тренировки</h2>
+    <p><b>График:</b> Понеделник, сряда и петък – 18:00–20:00. Събота и неделя – 13:30–15:00.</p>
+    <p><b>Цена:</b> 40 евро на месец.</p>
+    <p>Киокушин е път на цялостно самоусъвършенстване – физическо и духовно – в който всеки може да открие своето място, независимо от възрастта или опита. Нашите тренировки развиват не само тяло и дух, но и уважение, дисциплина и увереност, като са съобразени с нивото и индивидуалния напредък на всеки трениращ.</p>
+    <p><b>Нови членове са добре дошли да се включат по всяко време на годината!</b></p>
+  </div>
+
+  <!-- ГАЛЕРИЯ -->
+  <div id="gallery" class="content">
+    <h2>Галерия</h2>
+
+    <div class="gallery">
+      <div class="photo-item">
+        <p class="photo-title">Лагер Приморско 2025</p>
+        <img src="https://i.ibb.co/cXJjj46Q/516082360-122232493490074135-4577253926331427853-n.jpg"
+             alt="Лагер Приморско 2025"
+             onclick="openImage(this)">
+      </div>
+    </div>
+
+    <div id="imageModal" class="modal" onclick="closeImage()">
+      <div class="modal-inner" onclick="event.stopPropagation()">
+        <span class="close" onclick="closeImage()">&times;</span>
+        <img class="modal-content" id="modalImg" alt="">
+      </div>
+    </div>
+  </div>
+
+  <!-- КОНТАКТИ -->
+  <div id="contacts" class="content">
+    <h2>Контакти</h2>
+    <p><strong>Адрес:</strong> гр. София, ж.к. "Люлин Център", ул. „Добри Немиров“ 5 (<a href="https://www.lyulinplaza.com/?q=Люлин+Плаза+София" target="_blank">Люлин Плаза</a>), ет. 2.</p>
+    <p><strong>Сенсей:</strong> Румяна Янъкова, III дан.</p>
+    <p><strong>Телефон/Вайбър:</strong> 088 898 0967.</p>
+    <p><strong>Имейл:</strong> pressolski@abv.bg</p>
+    <p><a href="https://www.facebook.com/profile.php?id=61552224063859" target="_blank">@Facebook</a></p>
+    <br>
+    <h2>Местоположение по карта</h2>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2458.101333290449!2d23.259009799999998!3d42.71641639999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40aa9b00306ab7b1%3A0x77d73cdd37577c01!2z0JrQsNGA0LDRgtC1INCa0LjQvtC60YPRiNC40L0g0JrQu9GD0LEgItCk0LXQvdC40LrRgS3Qm9GO0LvQuNC9Ig!5e1!3m2!1sen!2sbg!4v1767477097361!5m2!1sen!2sbg"
+      width="100%"
+      height="400"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+
+  <!-- ИСТОРИЯ НА КИОКУШИН -->
+  <div id="kyokushin" class="content">
+    <h2>История на Киокушин</h2>
+    <div style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem;">
+      <img src="https://i.ibb.co/ynCtHcTG/Oyama-BW.jpg" alt="Масутатцу Ояма" style="width: 100px; height: auto; border-radius: 6px;">
+      <p><i>Масутатцу Ояма</i> (1923–1994) е основателят на <i>Киокушинкайкан (често наричан Киокушинкай или просто Киокушин)</i> карате – стил, известен с пълния контакт и суровата дисциплина. След смъртта му през 1994 г. организацията се разделя, а един от най-близките му ученици, Хацуо Рояма, създава Киокушин-кан карате, за да продължи линията на своя учител.
+
+Ояма е роден в Корея като истинското му име е Чой Йеон-еуи. На деветгодишна възраст започва да тренира китайско кенпо в Манджурия, а по-късно се занимава и с джудо и бокс. В Япония учи при Гичин Фунакоши, създателя на Шотокан карате, и други известни майстори. Ояма става прочут с легендарните си тренировки в планината, където изгражда философията си за „Абсолютната истина“, известна като Киокушин. Той демонстрира своята сила чрез чупене на камъни, дъски и тухли, както и чрез битки с бикове. През 1953 г. открива свое доджо в Токио и по-късно основава Международната Организация Киокушинкай (IKO). До смъртта си през 1994 г. е признат за един от най-влиятелните майстори на бойните изкуства в света.
+
+Киокушин карате означава „Върховна истина“. Този стил се отличава с пълен контакт, реалистични спаринги и изключително тежки тренировки. Той въвежда нов стандарт в карате, като го прави по-близко до реален бой. Организацията на Ояма бързо се разпространява по света и става една от най-големите карате школи.
+    </p>
+  </div>
+
+  <!-- Хацуо Рояма block -->
+  <div style="display: flex; align-items: flex-start; gap: 1rem;">
+    <img src="https://i.ibb.co/BVhtv3VN/Royama.jpg" alt="Хацуо Рояма" style="width: 100px; height: auto; border-radius: 6px;">
+    <p style="margin: 0;">
+      <i>Хацуо Рояма</i> е роден през 1948 г. в Япония и един от най-близките ученици на Мас Ояма и негов доверен наследник. След смъртта на учителя си през 1994 г. в международната организация настъпват разделения и спорове за лидерството. Рояма, заедно с други ученици, създава <i>Киокушин-кан</i> карате – организация, която има за цел да запази духа и методите на оригиналния Киокушин. Киокушин-кан се отличава с акцент върху традицията, дисциплината и реалния боен дух, като същевременно развива модерна структура за международни състезания и усъвършенстване и обогатяване на техниките и методите за изграждане на умения.
+</p>
+    </div>
+  </div>
+
+  <script>
+    const logo = document.getElementById("logo");
+    const topMenu = document.getElementById("topMenu");
+    const centerContainer = document.getElementById("centerContainer");
+    const bgLayer = document.getElementById("bgLayer");
+
+    logo.addEventListener("click", () => {
+      logo.classList.toggle("open");
+      topMenu.classList.toggle("show");
+    });
+
+    function openSection(id) {
+      document.getElementById("imageModal").style.display = "none"; /* FIX */
+
+      centerContainer.classList.add("hidden");
+      document.querySelectorAll(".content").forEach(el => el.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      topMenu.classList.add("show");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return false;
+    }
+
+    bgLayer.addEventListener("click", () => {
+      document.querySelectorAll(".content").forEach(s => s.classList.remove("active"));
+      topMenu.classList.remove("show");
+      centerContainer.classList.remove("hidden");
+      logo.classList.remove("open");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    function openImage(img) {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImg');
+      modal.style.display = "flex";
+      modalImg.src = img.src;
+    }
+
+    function closeImage() {
+      document.getElementById('imageModal').style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
