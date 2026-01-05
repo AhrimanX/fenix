@@ -16,24 +16,11 @@
       color: white;
       min-height: 100vh;
       position: relative;
+      transition: padding-top 0.3s ease;
     }
 
-    /* SECTION LINKS ONLY */
-    .content a,
-    .content a:visited,
-    .content a:active {
-      color: white !important;
-      text-decoration: underline !important;
-      transition: color 0.25s ease;
-    }
-
-    .content a:hover {
-      color: #ff4444 !important;
-      text-decoration: underline !important;
-    }
-
-    .content h2 {
-      text-decoration: none !important;
+    body.menu-open {
+      padding-top: 60px;
     }
 
     #bgLayer {
@@ -59,15 +46,98 @@
     .bg-left { left: 0; }
     .bg-right { right: 0; }
 
+    /* LOGO */
+    .logo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 350px;
+      cursor: pointer;
+      animation: pulseLogo 2.2s ease-in-out infinite;
+      transition: all 0.3s ease;
+      z-index: 2000;
+    }
+
+    @keyframes pulseLogo {
+      0%   { transform: translate(-50%, -50%) scale(1); }
+      50%  { transform: translate(-50%, -50%) scale(1.08); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .logo.mini {
+      position: fixed;
+      top: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 70px !important;
+      animation: pulseLogoMini 2.2s ease-in-out infinite;
+      z-index: 2000;
+    }
+
+    @keyframes pulseLogoMini {
+      0%   { transform: translateX(-50%) scale(1); }
+      50%  { transform: translateX(-50%) scale(1.08); }
+      100% { transform: translateX(-50%) scale(1); }
+    }
+
+    .logo.mini.menu-open {
+      top: 80px;
+    }
+
+    /* TOP BAR + MENU */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0,0,0,0.85);
+      z-index: 1500;
+      display: flex; /* ALWAYS VISIBLE ON PC */
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 1rem;
+      height: 60px;
+      box-sizing: border-box;
+    }
+
+    .hamburger {
+      display: none;
+      position: absolute;
+      left: 1rem;
+      font-size: 1.8rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .top-menu {
+      display: flex; /* ALWAYS VISIBLE ON PC */
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .top-menu.show {
+      display: flex;
+    }
+
+    .top-menu a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+    }
+
+    .top-menu a:hover {
+      color: #ff4444;
+    }
+
+    /* CONTENT */
     .center-container {
-      position: relative;
       width: 100%;
       height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       transition: opacity 0.4s ease, height 0.4s ease;
-      z-index: 5;
     }
 
     .center-container.hidden {
@@ -77,62 +147,11 @@
       overflow: hidden;
     }
 
-    .logo {
-      height: 350px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      animation: pulseLogo 2.2s ease-in-out infinite;
-    }
-
-    @keyframes pulseLogo {
-      0%   { transform: scale(1); }
-      50%  { transform: scale(1.08); }
-      100% { transform: scale(1); }
-    }
-
-    .logo.open {
-      animation: none !important;
-      transform: scale(1.15) !important;
-    }
-
-    .top-menu {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0,0,0,0.85);
-      padding: 1rem 0;
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-      z-index: 100;
-    }
-
-    .top-menu.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .top-menu a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1.2rem;
-      transition: color 0.2s ease;
-    }
-
-    .top-menu a:hover {
-      color: #ff4444;
-    }
-
     .content {
       display: none;
       padding: 2rem;
       max-width: 800px;
-      margin: 5rem auto 2rem auto;
+      margin: 180px auto 2rem auto;
       background: rgba(0,0,0,0.7);
       border-radius: 8px;
       text-align: justify;
@@ -158,22 +177,8 @@
       text-align: center;
     }
 
-    .photo-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .photo-title {
-      margin-bottom: 0.5rem;
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 0 0 6px rgba(0,0,0,0.5);
-    }
-
     .photo-item img {
       width: 20%;
-      height: auto;
       border-radius: 8px;
       cursor: pointer;
       transition: transform 0.3s ease;
@@ -183,6 +188,7 @@
       transform: scale(1.05);
     }
 
+    /* FIXED MODAL */
     .modal {
       display: none;
       position: fixed;
@@ -191,25 +197,15 @@
       top: 0;
       width: 100%;
       height: 100%;
-      overflow: auto;
       background-color: rgba(0,0,0,0.9);
-      display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    .modal-inner {
-      position: relative;
-      width: auto;
-      height: auto;
-    }
-
     .modal-content {
-      width: 50%;
-      height: auto;
+      max-width: 90vw;
+      max-height: 90vh;
       border-radius: 10px;
-      display: block;
-      margin: auto;
     }
 
     .close {
@@ -218,78 +214,54 @@
       right: 35px;
       color: white;
       font-size: 40px;
-      font-weight: bold;
       cursor: pointer;
       text-shadow: 0 0 8px black;
-      z-index: 300;
     }
 
-    .close:hover { color: #bbb; }
-
-    /* ------------------------------------------------------ */
-    /* 📱 MOBILE / TALL SCREENS — AUTO-ADAPT LAYOUT           */
-    /* ------------------------------------------------------ */
+    /* MOBILE (UNCHANGED) */
     @media (max-width: 600px), (max-aspect-ratio: 9/16) {
 
-      body {
-        background-size: cover;
-        background-attachment: scroll;
-      }
+/* ADD THIS HERE */
+  body {
+    background: url('https://i.ibb.co/Xk6MWJLb/Gemini-Rumi.jpg') no-repeat center center fixed;
+    background-size: cover;
+  }
 
-      .bg-left, .bg-right {
-        opacity: 0.08;
-        height: 25vh;
-      }
-
-      /* Logo becomes a fixed top button, perfectly centered */
-      .logo {
-        height: 100px !important;
-        position: fixed;
-        top: 10px;
-        left: 0;
-        right: 0;
-        margin: auto;
-        z-index: 2000;
-        animation: pulseLogo 2.2s ease-in-out infinite;
-        transform: none !important;
-      }
-
-      .logo.open {
-        transform: scale(1.15) !important;
-      }
-
-      .center-container {
-        height: auto;
-        padding-top: 140px;
+      .hamburger {
+        display: block;
       }
 
       .top-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
         flex-direction: column;
-        gap: 1rem;
-        padding: 6rem 0 1.5rem 0;
-        background: rgba(0,0,0,0.92);
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(0,0,0,0.95);
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.3s ease, opacity 0.3s ease;
       }
 
-      .top-menu a {
-        font-size: 1.4rem;
-        padding: 0.6rem 0;
+      .top-menu.show {
+        display: flex;
+        max-height: 300px;
+        opacity: 1;
+      }
+
+      .logo {
+        height: 140px !important;
       }
 
       .content {
-        margin: 2rem 1rem;
+        margin: 190px 1rem 2rem 1rem;
         padding: 1.2rem;
-        font-size: 1.05rem;
       }
 
-      .gallery {
-        grid-template-columns: 1fr;
-      }
-
-      .photo-item img {
-        width: 90%;
-      }
-
-      .modal-content {
+      .gallery img {
         width: 90%;
       }
     }
@@ -303,40 +275,40 @@
   <img src="https://i.ibb.co/8nw1n2b2/kan50black.png" class="bg-left" alt="">
   <img src="https://i.ibb.co/N6xwC0mt/Kyokushinkai-resized-50.png" class="bg-right" alt="">
 
-  <div class="top-menu" id="topMenu">
-    <a href="#" onclick="return openSection('history')">За клуба</a>
-    <a href="#" onclick="return openSection('training')">Тренировки</a>
-    <a href="#" onclick="return openSection('gallery')">Галерия</a>
-    <a href="#" onclick="return openSection('contacts')">Контакти</a>
-    <a href="#" onclick="return openSection('kyokushin')">История на Киокушин</a>
+  <div class="top-bar">
+    <div class="top-menu" id="topMenu">
+      <a href="#" onclick="return openSection('history')">ЗА КЛУБА</a>
+      <a href="#" onclick="return openSection('training')">ТРЕНИРОВКИ</a>
+      <a href="#" onclick="return openSection('gallery')">ГАЛЕРИЯ</a>
+      <a href="#" onclick="return openSection('contacts')">КОНТАКТИ</a>
+      <a href="#" onclick="return openSection('kyokushin')">ИСТОРИЯ НА КИОКУШИН</a>
+    </div>
   </div>
 
-  <div class="center-container" id="centerContainer">
-    <img src="https://i.ibb.co/kgG8B8W7/3rd-variation-Copy-removebg-preview.png"
-         class="logo"
-         id="logo"
-         alt="Феникс Люлин Лого">
-  </div>
+  <div class="center-container" id="centerContainer"></div>
 
-  <!-- ЗА КЛУБА -->
+  <img src="https://i.ibb.co/kgG8B8W7/3rd-variation-Copy-removebg-preview.png"
+       class="logo"
+       id="logo"
+       alt="Феникс Люлин Лого">
+
+  <!-- CONTENT SECTIONS -->
   <div id="history" class="content">
-    <h2>За клуба</h2>
-    <p>Клубът е създаден през 2023 г. и е част от Българска Федерация Киокушин-кан, която е официален представител на Kyokushin-kan International Organization Honbu, оглавявана от Хацуо Рояма – възпитаник и близък на основателя на Киокушин карате (прочетете повече секцията "История на Киокушин".</p>
+    <h2>ЗА КЛУБА</h2>
+    <p>Клубът е създаден през 2023 г. и е част от Българска Федерация Киокушин-кан, която е официален представител на Kyokushin-kan International Organization Honbu, оглавявана от Хацуо Рояма – възпитаник и близък на основателя на Киокушин карате (прочетете повече секцията "История на Киокушин").</p>
     <p>Предстои повече информация...</p>
   </div>
 
-  <!-- ТРЕНИРОВКИ -->
   <div id="training" class="content">
-    <h2>Тренировки</h2>
+    <h2>ТРЕНИРОВКИ</h2>
     <p><b>График:</b> Понеделник, сряда и петък – 18:00–20:00. Събота и неделя – 13:30–15:00.</p>
     <p><b>Цена:</b> 40 евро на месец.</p>
     <p>Киокушин е път на цялостно самоусъвършенстване – физическо и духовно – в който всеки може да открие своето място, независимо от възрастта или опита. Нашите тренировки развиват не само тяло и дух, но и уважение, дисциплина и увереност, като са съобразени с нивото и индивидуалния напредък на всеки трениращ.</p>
     <p><b>Нови членове са добре дошли да се включат по всяко време на годината!</b></p>
   </div>
 
-  <!-- ГАЛЕРИЯ -->
   <div id="gallery" class="content">
-    <h2>Галерия</h2>
+    <h2>ГАЛЕРИЯ</h2>
 
     <div class="gallery">
       <div class="photo-item">
@@ -346,23 +318,15 @@
              onclick="openImage(this)">
       </div>
     </div>
-
-    <div id="imageModal" class="modal" onclick="closeImage()">
-      <div class="modal-inner" onclick="event.stopPropagation()">
-        <span class="close" onclick="closeImage()">&times;</span>
-        <img class="modal-content" id="modalImg" alt="">
-      </div>
-    </div>
   </div>
 
-  <!-- КОНТАКТИ -->
   <div id="contacts" class="content">
-    <h2>Контакти</h2>
-    <p><strong>Адрес:</strong> гр. София, ж.к. "Люлин Център", ул. „Добри Немиров“ 5 (<a href="https://www.lyulinplaza.com/?q=Люлин+Плаза+София" target="_blank">Люлин Плаза</a>), ет. 2.</p>
+    <h2>КОНТАКТИ</h2>
+    <p><strong>Адрес:</strong> гр. София, ж.к. "Люлин Център", ул. „Добри Немиров“ 5, (<a href="https://www.lyulinplaza.com/?q=Люлин+Плаза+София" target="_blank">Люлин Плаза</a>), ет. 2</p>
     <p><strong>Сенсей:</strong> Румяна Янъкова, III дан.</p>
-    <p><strong>Телефон/Вайбър:</strong> 088 898 0967.</p>
-    <p><strong>Имейл:</strong> pressolski@abv.bg</p>
+    <p><strong>Телефон/Viber:</strong> 088 898 0967.</p>
     <p><a href="https://www.facebook.com/profile.php?id=61552224063859" target="_blank">@Facebook</a></p>
+    <p><strong>Имейл:</strong> pressolski@abv.bg</p>
     <br>
     <h2>Местоположение по карта</h2>
     <iframe
@@ -376,9 +340,8 @@
     </iframe>
   </div>
 
-  <!-- ИСТОРИЯ НА КИОКУШИН -->
   <div id="kyokushin" class="content">
-    <h2>История на Киокушин</h2>
+    <h2>ИСТОРИЯ НА КИОКУШИН</h2>
     <div style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem;">
       <img src="https://i.ibb.co/ynCtHcTG/Oyama-BW.jpg" alt="Масутатцу Ояма" style="width: 100px; height: auto; border-radius: 6px;">
       <p><i>Масутатцу Ояма</i> (1923–1994) е основателят на <i>Киокушинкайкан (често наричан Киокушинкай или просто Киокушин)</i> карате – стил, известен с пълния контакт и суровата дисциплина. След смъртта му през 1994 г. организацията се разделя, а един от най-близките му ученици, Хацуо Рояма, създава Киокушин-кан карате, за да продължи линията на своя учител.
@@ -386,39 +349,66 @@
 Ояма е роден в Корея като истинското му име е Чой Йеон-еуи. На деветгодишна възраст започва да тренира китайско кенпо в Манджурия, а по-късно се занимава и с джудо и бокс. В Япония учи при Гичин Фунакоши, създателя на Шотокан карате, и други известни майстори. Ояма става прочут с легендарните си тренировки в планината, където изгражда философията си за „Абсолютната истина“, известна като Киокушин. Той демонстрира своята сила чрез чупене на камъни, дъски и тухли, както и чрез битки с бикове. През 1953 г. открива свое доджо в Токио и по-късно основава Международната Организация Киокушинкай (IKO). До смъртта си през 1994 г. е признат за един от най-влиятелните майстори на бойните изкуства в света.
 
 Киокушин карате означава „Върховна истина“. Този стил се отличава с пълен контакт, реалистични спаринги и изключително тежки тренировки. Той въвежда нов стандарт в карате, като го прави по-близко до реален бой. Организацията на Ояма бързо се разпространява по света и става една от най-големите карате школи.
-      </p>
+    </p>
+  </div>
+
+  <!-- Хацуо Рояма block -->
+  <div style="display: flex; align-items: flex-start; gap: 1rem;">
+    <img src="https://i.ibb.co/BVhtv3VN/Royama.jpg" alt="Хацуо Рояма" style="width: 100px; height: auto; border-radius: 6px;">
+    <p style="margin: 0;">
+      <i>Хацуо Рояма</i> е роден през 1948 г. в Япония и един от най-близките ученици на Мас Ояма и негов доверен наследник. След смъртта на учителя си през 1994 г. в международната организация настъпват разделения и спорове за лидерството. Рояма, заедно с други ученици, създава <i>Киокушин-кан</i> карате – организация, която има за цел да запази духа и методите на оригиналния Киокушин. Киокушин-кан се отличава с акцент върху традицията, дисциплината и реалния боен дух, като същевременно развива модерна структура за международни състезания и усъвършенстване и обогатяване на техниките и методите за изграждане на умения.
+</p>
     </div>
 
-    <div style="display: flex; align-items: flex-start; gap: 1rem;">
-      <img src="https://i.ibb.co/BVhtv3VN/Royama.jpg" alt="Хацуо Рояма" style="width: 100px; height: auto; border-radius: 6px;">
-      <p style="margin: 0;">
-        <i>Хацуо Рояма</i> е роден през 1948 г. в Япония и един от най-близките ученици на Мас Ояма и негов доверен наследник. След смъртта на учителя си през 1994 г. в международната организация настъпват разделения и спорове за лидерството. Рояма, заедно с други ученици, създава <i>Киокушин-кан</i> карате – организация, която има за цел да запази духа и методите на оригиналния Киокушин. Киокушин-кан се отличава с акцент върху традицията, дисциплината и реалния боен дух, като същевременно развива модерна структура за международни състезания и усъвършенстване и обогатяване на техниките и методите за изграждане на умения.
-      </p>
+  <!-- GLOBAL MODAL (correct placement) -->
+  <div id="imageModal" class="modal" onclick="closeImage()">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+      <span class="close" onclick="closeImage()">&times;</span>
+      <img class="modal-content" id="modalImg" alt="">
     </div>
   </div>
 
   <script>
     const logo = document.getElementById("logo");
     const topMenu = document.getElementById("topMenu");
+    const topBar = document.querySelector(".top-bar");
     const centerContainer = document.getElementById("centerContainer");
     const bgLayer = document.getElementById("bgLayer");
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    logo.addEventListener("click", () => {
-      const isOpen = logo.classList.toggle("open");
-      topMenu.classList.toggle("show", isOpen);
+    // Clicking the logo
+    logo.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      const menuIsOpen = topMenu.classList.contains("show");
+      const isMini = logo.classList.contains("mini");
+
+      if (isMini) {
+        document.querySelectorAll(".content").forEach(s => s.classList.remove("active"));
+        centerContainer.classList.remove("hidden");
+        logo.classList.remove("mini", "menu-open");
+        return;
+      }
+
+      if (isMobile) {
+        topMenu.classList.toggle("show");
+        topBar.style.display = topMenu.classList.contains("show") ? "flex" : "none";
+        document.body.classList.toggle("menu-open");
+      }
     });
 
     function openSection(id) {
-      const modal = document.getElementById("imageModal");
-      if (modal) modal.style.display = "none";
-
-      centerContainer.classList.add("hidden");
-
       document.querySelectorAll(".content").forEach(el => el.classList.remove("active"));
       document.getElementById(id).classList.add("active");
 
-      topMenu.classList.remove("show");
-      logo.classList.remove("open");
+      centerContainer.classList.add("hidden");
+      logo.classList.add("mini");
+
+      if (isMobile) {
+        topMenu.classList.remove("show");
+        topBar.style.display = "none";
+        document.body.classList.remove("menu-open");
+      }
 
       window.scrollTo({ top: 0, behavior: "smooth" });
       return false;
@@ -426,9 +416,15 @@
 
     bgLayer.addEventListener("click", () => {
       document.querySelectorAll(".content").forEach(s => s.classList.remove("active"));
-      topMenu.classList.remove("show");
       centerContainer.classList.remove("hidden");
-      logo.classList.remove("open");
+      logo.classList.remove("mini", "menu-open");
+
+      if (isMobile) {
+        topMenu.classList.remove("show");
+        topBar.style.display = "none";
+        document.body.classList.remove("menu-open");
+      }
+
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
